@@ -13,6 +13,10 @@ func getLevel3(line string) (string, string) {
 	switch {
 	case regexp.MustCompile(`^###\s\[WORK\]`).Match([]byte(line)):
 		return re.FindStringSubmatch(line)[1], "WORK"
+	case regexp.MustCompile(`^###\s\[NECESSARY\]`).Match([]byte(line)):
+		return "", "NECESSARY"
+	case regexp.MustCompile(`^###\s\[FEASIBILITY\]`).Match([]byte(line)):
+		return "", "FEASIBILITY"
 	case regexp.MustCompile(`^###\s\[REFS\]`).Match([]byte(line)):
 		return "", "REFS"
 	case regexp.MustCompile(`^###\s\[WHAT\]`).Match([]byte(line)):
@@ -30,6 +34,10 @@ func getLevel3(line string) (string, string) {
 func getLevel2(line string) (string, string) {
 	re := regexp.MustCompile(`^##\s\[.+\]\s(.*)`)
 	switch {
+	case regexp.MustCompile(`^##\s\[STOP\]`).Match([]byte(line)):
+		return re.FindStringSubmatch(line)[1], "STOP"
+	case regexp.MustCompile(`^##\s\[THINK\]`).Match([]byte(line)):
+		return re.FindStringSubmatch(line)[1], "THINK"
 	case regexp.MustCompile(`^##\s\[REVIEW\]`).Match([]byte(line)):
 		return re.FindStringSubmatch(line)[1], "REVIEW"
 	case regexp.MustCompile(`^##\s\[WIP\]`).Match([]byte(line)):

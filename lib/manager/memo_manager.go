@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -54,21 +55,25 @@ func (m MemoManager) Level3() []*model.MemoNode {
 	return ret
 }
 
-// GetNode is
-func (m MemoManager) GetNode(title string) string {
-	for index := range m.TopLevel.Children {
-		if m.TopLevel.Children[index].Title == title {
-			return m.Decode(m.TopLevel.Children[index])
-		}
-	}
-	return ""
+// ExtractFromIndex is
+func (m MemoManager) ExtractByIndex(index int) string {
+	return m.Decode(m.TopLevel.Children[index])
 }
 
 // TitleList is
 func (m MemoManager) TitleList() string {
 	titleList := []string{}
 	for index := range m.TopLevel.Children {
-		titleList = append(titleList, m.TopLevel.Children[index].Title)
+		titleList = append(titleList, fmt.Sprintf("[%s] %s", m.TopLevel.Children[index].Attribute, m.TopLevel.Children[index].Title))
+	}
+	return strings.Join(titleList, "\n")
+}
+
+// TitleListWithIndex is
+func (m MemoManager) TitleListWithIndex() string {
+	titleList := []string{}
+	for index := range m.TopLevel.Children {
+		titleList = append(titleList, fmt.Sprintf("%3d [%s] %s", index, m.TopLevel.Children[index].Attribute, m.TopLevel.Children[index].Title))
 	}
 	return strings.Join(titleList, "\n")
 }

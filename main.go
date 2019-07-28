@@ -10,13 +10,17 @@ import (
 import "github.com/kokoax/my_favorit_memos/lib/manager"
 
 func main() {
-	filepath := "/home/kokoax/memos.md"
+	filepath := "/Users/y-tokoi/memos/memo.md"
 	f, _ := os.Open(filepath)
 	defer f.Close()
 
-	b, _ := ioutil.ReadAll(f)
+	b, err := ioutil.ReadAll(f)
+	if err != nil {
+		panic(err)
+	}
 
 	title := flag.Bool("t", false, "Show list of title")
+	titleWithIndex := flag.Bool("ti", false, "Show list of title")
 	extract := flag.String("e", "", "Extract memo and start edit")
 	flag.Parse()
 
@@ -29,8 +33,12 @@ func main() {
 		fmt.Println(mm.TitleList())
 	}
 
+	if *titleWithIndex == true {
+		fmt.Println(mm.TitleListWithIndex())
+	}
+
 	if *extract != "" {
-		fmt.Println(mm.GetNode(*extract))
+		fmt.Println(mm.ExtractByIndex(0))
 	}
 
 	// fmt.Println(mm.Decode(mm.TopLevel))
