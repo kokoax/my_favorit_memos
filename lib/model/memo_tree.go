@@ -12,9 +12,10 @@ type MemoTree struct {
 // generateTree is
 func generateTree(eachLine []string, parent *MemoNode, index int) (*MemoNode, error) {
 	var child *MemoNode = &MemoNode{}
+  var err error = nil
 
-	if regexp.MustCompile(`^#`).Match([]byte(eachLine[index])) {
-    child, err := getNode(eachLine[index], parent)
+  if regexp.MustCompile(`^#`).Match([]byte(eachLine[index])) {
+    child, err = getNode(eachLine[index], parent)
     if err != nil {
       return nil, err
     }

@@ -22,6 +22,7 @@ func exec() error {
   title := flag.Bool("t", false, "Show list of title")
   titleWithIndex := flag.Bool("ti", false, "Show list of title")
   extract := flag.String("e", "", "Extract memo and start edit")
+  getLevel3ByIndex := flag.Int("g3", -1, "Show level3 by level2 index")
   level := flag.Bool("l", false, "Show list of level")
   flag.Parse()
 
@@ -40,6 +41,14 @@ func exec() error {
 
   if *extract != "" {
     fmt.Println(mm.ExtractByIndex(0))
+  }
+
+  if *getLevel3ByIndex != -1 {
+    ret, err := mm.GetLevel3ByIndex(*getLevel3ByIndex)
+    if err != nil {
+      return err
+    }
+    fmt.Println(ret)
   }
 
   if *level == true {

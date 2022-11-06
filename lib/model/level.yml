@@ -5,12 +5,10 @@ level2:
   - "THINK"
   - "REVIEW"
   - "WIP"
-  - "WAIT"
+  - "PEND"
   - "DONE"
 level3:
   - "WORK"
-  - "NECESSARY"
-  - "FEASIBILITY"
   - "REFS"
   - "WHAT"
   - "WHY"

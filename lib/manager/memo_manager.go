@@ -78,6 +78,18 @@ func (m MemoManager) TitleListWithIndex() string {
   return strings.Join(titleList, "\n")
 }
 
+func (m MemoManager) GetLevel3ByIndex(level2Index int) (string, error) {
+  titleList := []string{}
+  level3 := m.TopLevel.Children[level2Index].Children
+  if len(level3) < level2Index {
+    return "", fmt.Errorf(fmt.Sprintf("Dose not exist index %d", level2Index))
+  }
+  for index := range level3 {
+    titleList = append(titleList, fmt.Sprintf("%3d [%s] %s", index, level3[index].Attribute, level3[index].Title))
+  }
+  return strings.Join(titleList, "\n"), nil
+}
+
 // Decode is
 func (m MemoManager) Decode(parent *model.MemoNode) string {
   text := parent.Text
