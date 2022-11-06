@@ -5,7 +5,11 @@ import (
 )
 
 func TestGetLevel3WORK(t *testing.T) {
-  rtitle, rattribute := getLevel3("### [WORK] 2019/07/01")
+  rtitle, rattribute, err := getLevel3("### [WORK] 2019/07/01")
+
+  if err == nil {
+    t.Fatalf("Execute faild getLevel3\n")
+  }
 
   if rtitle != "2019/07/01" {
     t.Fatalf("getLevel3 title missing, expect 2019/07/01 but got '%s'\n", rtitle)
@@ -17,7 +21,11 @@ func TestGetLevel3WORK(t *testing.T) {
 }
 
 func TestGetLevel3REFS(t *testing.T) {
-  rtitle, rattribute := getLevel3("### [REFS] some title")
+  rtitle, rattribute, err := getLevel3("### [REFS] some title")
+
+  if err == nil {
+    t.Fatalf("Execute faild getLevel3\n")
+  }
 
   if rtitle != "some title" {
     t.Fatalf("getLevel3 title missing, expect ''(empty) but got '%s'\n", rtitle)
@@ -29,9 +37,13 @@ func TestGetLevel3REFS(t *testing.T) {
 }
 
 func TestGetLevel2REVIEW(t *testing.T) {
-  rtitle, rattribute := getLevel2("## [REVIEW] sample title")
+  rtitle, rattribute, err := getLevel2("## [REVIEW] sample title")
 
-  if rtitle != "sample title" {
+  if err == nil {
+    t.Fatalf("Execute faild getLevel2\n")
+  }
+
+ if rtitle != "sample title" {
     t.Fatalf("getLevel2 title missing, expect 'sample title' but got '%s'\n", rtitle)
   }
 
@@ -41,7 +53,11 @@ func TestGetLevel2REVIEW(t *testing.T) {
 }
 
 func TestGetLevel1TOP(t *testing.T) {
-  rtitle, rattribute := getLevel1("# [TOP] sample title")
+  rtitle, rattribute, err := getLevel1("# [TOP] sample title")
+
+  if err == nil {
+    t.Fatalf("Execute faild getLevel1\n")
+  }
 
   if rtitle != "sample title" {
     t.Fatalf("getLevel1 title missing, expect 'sample title' but got '%s'\n", rtitle)
