@@ -19,7 +19,7 @@ type LevelYaml struct {
 
 func GetLevelYaml() (LevelYaml, error) {
   levelYaml := LevelYaml{}
-  b, err := os.ReadFile("level.yml")
+  b, err := os.ReadFile("lib/mode/level.yml")
 
   if err != nil {
     return LevelYaml{}, err
