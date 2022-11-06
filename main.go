@@ -9,14 +9,14 @@ import (
 
 import "github.com/kokoax/my_favorit_memos/lib/manager"
 
-func main() {
+func exec() error {
   filepath := "/Users/ca01072/memos/memo.md"
   f, _ := os.Open(filepath)
   defer f.Close()
 
   b, err := ioutil.ReadAll(f)
   if err != nil {
-    panic(err)
+    return err
   }
 
   title := flag.Bool("t", false, "Show list of title")
@@ -27,7 +27,7 @@ func main() {
 
   mm, err := manager.NewMemoManager(string(b))
   if err != nil {
-    panic(err)
+    return err
   }
 
   if *title == true {
@@ -57,5 +57,14 @@ func main() {
     for index := range level.Level3 {
       fmt.Println("\t", level.Level3[index])
     }
+  }
+
+  return nil
+}
+
+func main() {
+  err := exec()
+  if err != nil {
+    fmt.Printf("%#v\n", err)
   }
 }

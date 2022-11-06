@@ -64,31 +64,33 @@ func getLevel(line string, level int) (string, string, error) {
   for index := range levelYaml {
     text := levelYaml[index]
     matchText := fmt.Sprintf(`^%s\s\[%s\]`, sharp, text)
-    // fmt.Println(line)
-    // fmt.Println(fmt.Sprintf(`^%s\s\[%s\]`, sharp, text))
-    // fmt.Println(regexp.MustCompile(matchText).Match([]byte(line)))
     if regexp.MustCompile(matchText).Match([]byte(line)) {
-      return re.FindStringSubmatch(line)[1], text, nil
+      if re.Match([]byte(line)) {
+        return re.FindStringSubmatch(line)[1], text, nil
+      } else {
+        return "", text, nil
+      }
     }
   }
 
+  fmt.Println(line)
   return "", "", fmt.Errorf(fmt.Sprintf("Not found level text in level%d", level))
 }
 
 // GetLevel3 is
-func getLevel3(line string) (string, string) {
-  title, text, _ := getLevel(line, 3)
-  return title, text
+func getLevel3(line string) (string, string, error) {
+  title, text, err := getLevel(line, 3)
+  return title, text, err
 }
 
 // GetLevel2 is
-func getLevel2(line string) (string, string) {
-  title, text, _ := getLevel(line, 2)
-  return title, text
+func getLevel2(line string) (string, string, error) {
+  title, text, err := getLevel(line, 2)
+  return title, text, err
 }
 
 // GetLevel1 is
-func getLevel1(line string) (string, string) {
-  title, text, _ := getLevel(line, 1)
-  return title, text
+func getLevel1(line string) (string, string, error) {
+  title, text, err := getLevel(line, 1)
+  return title, text, err
 }
