@@ -10,7 +10,7 @@ import (
 import "github.com/kokoax/my_favorit_memos/lib/manager"
 
 func main() {
-	filepath := "/Users/y-tokoi/memos/memo.md"
+	filepath := "/Users/ca01072/memos/memo.md"
 	f, _ := os.Open(filepath)
 	defer f.Close()
 
