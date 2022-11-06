@@ -1,0 +1,17 @@
+level1:
+  - "TOP"
+level2:
+  - "STOP"
+  - "THINK"
+  - "REVIEW"
+  - "WIP"
+  - "WAIT"
+  - "DONE"
+level3:
+  - "WORK"
+  - "NECESSARY"
+  - "FEASIBILITY"
+  - "REFS"
+  - "WHAT"
+  - "WHY"
+  - "HOW"

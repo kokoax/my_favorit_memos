@@ -1,63 +1,94 @@
 package model
 
 import (
-	"regexp"
+  "os"
+  "fmt"
+  "regexp"
+
+  "gopkg.in/yaml.v2"
 )
 
 // MemoLevel is
 type MemoLevel struct{}
 
+type LevelYaml struct {
+  Level1 []string `yaml:"level1"`
+  Level2 []string `yaml:"level2"`
+  Level3 []string `yaml:"level3"`
+}
+
+func GetLevelYaml() (LevelYaml, error) {
+  levelYaml := LevelYaml{}
+  b, err := os.ReadFile("level.yml")
+
+  if err != nil {
+    return LevelYaml{}, err
+  }
+  err = yaml.Unmarshal(b, &levelYaml)
+
+  if err != nil {
+    return LevelYaml{}, err
+  }
+
+  return levelYaml, nil
+}
+
+func getSharp(level int) string {
+  sharp := ""
+  for index := 0; index < level; index++ {
+    sharp += "#"
+  }
+
+  return sharp
+}
+
+func getLevel(line string, level int) (string, string, error) {
+  sharp := getSharp(level)
+  re := regexp.MustCompile(fmt.Sprintf(`^%s\s\[.+\]\s(.*)`, sharp))
+  levelYamls , err := GetLevelYaml()
+  if err != nil {
+    return "", "", err
+  }
+
+  levelYaml := []string{}
+  if level == 3 {
+    levelYaml = levelYamls.Level3
+  } else if level == 2 {
+    levelYaml = levelYamls.Level2
+  } else if level == 1 {
+    levelYaml = levelYamls.Level1
+  } else {
+    return "", "", fmt.Errorf(fmt.Sprintf("Dose not exist level%d", level))
+  }
+
+  for index := range levelYaml {
+    text := levelYaml[index]
+    matchText := fmt.Sprintf(`^%s\s\[%s\]`, sharp, text)
+    // fmt.Println(line)
+    // fmt.Println(fmt.Sprintf(`^%s\s\[%s\]`, sharp, text))
+    // fmt.Println(regexp.MustCompile(matchText).Match([]byte(line)))
+    if regexp.MustCompile(matchText).Match([]byte(line)) {
+      return re.FindStringSubmatch(line)[1], text, nil
+    }
+  }
+
+  return "", "", fmt.Errorf(fmt.Sprintf("Not found level text in level%d", level))
+}
+
 // GetLevel3 is
 func getLevel3(line string) (string, string) {
-	re := regexp.MustCompile(`^###\s\[.+\]\s(.*)`)
-	switch {
-	case regexp.MustCompile(`^###\s\[WORK\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "WORK"
-	case regexp.MustCompile(`^###\s\[NECESSARY\]`).Match([]byte(line)):
-		return "", "NECESSARY"
-	case regexp.MustCompile(`^###\s\[FEASIBILITY\]`).Match([]byte(line)):
-		return "", "FEASIBILITY"
-	case regexp.MustCompile(`^###\s\[REFS\]`).Match([]byte(line)):
-		return "", "REFS"
-	case regexp.MustCompile(`^###\s\[WHAT\]`).Match([]byte(line)):
-		return "", "WHAT"
-	case regexp.MustCompile(`^###\s\[WHY\]`).Match([]byte(line)):
-		return "", "WHY"
-	case regexp.MustCompile(`^###\s\[HOW\]`).Match([]byte(line)):
-		return "", "HOW"
-	default:
-		return "", ""
-	}
+  title, text, _ := getLevel(line, 3)
+  return title, text
 }
 
 // GetLevel2 is
 func getLevel2(line string) (string, string) {
-	re := regexp.MustCompile(`^##\s\[.+\]\s(.*)`)
-	switch {
-	case regexp.MustCompile(`^##\s\[STOP\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "STOP"
-	case regexp.MustCompile(`^##\s\[THINK\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "THINK"
-	case regexp.MustCompile(`^##\s\[REVIEW\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "REVIEW"
-	case regexp.MustCompile(`^##\s\[WIP\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "WIP"
-	case regexp.MustCompile(`^##\s\[WAIT\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "WAIT"
-	case regexp.MustCompile(`^##\s\[DONE\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "DONE"
-	default:
-		return "", ""
-	}
+  title, text, _ := getLevel(line, 2)
+  return title, text
 }
 
 // GetLevel1 is
 func getLevel1(line string) (string, string) {
-	re := regexp.MustCompile(`^#\s\[.+\]\s(.*)`)
-	switch {
-	case regexp.MustCompile(`^#\s\[TOP\]`).Match([]byte(line)):
-		return re.FindStringSubmatch(line)[1], "TOP"
-	default:
-		return "", ""
-	}
+  title, text, _ := getLevel(line, 1)
+  return title, text
 }
